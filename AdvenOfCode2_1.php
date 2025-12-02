@@ -1,26 +1,28 @@
 <?php
+$input = file_get_contents("./AdventodCode2_1");
 
+$splitted = explode(",",$input);
 
+$sum = 0;
+foreach($splitted as $key => $value){
+    $parts = explode("-",$value);
+    for($i = $parts[0]; $i<= $parts[1]; $i++) {
 
-$handle = fopen ("./AdventodCode1_1","r");
-$count = [];
-$number = 50;
-while ( $inhalt = fgets($handle, 4096 ))
-{
-    $length = strlen($inhalt);
-    switch(substr($inhalt,0,1)){
-        case 'L':
-            $number = $number - (int)substr($inhalt ,1,$length);
-            break;
-        case 'R':
-            $number = $number +(int)substr($inhalt,1,$length);
-            break;
+        $length1 = strlen($i);
+        if($length1 % 2 == 0) {
+            if (substr($i, 0, $length1 / 2) == substr($i, $length1 / 2, $length1)) {
+                $sum += $i;
+            }
+        }
     }
-    $currentPosition = (($number % 100) + 100) % 100;
-    array_key_exists($currentPosition,$count) ? $count[$currentPosition]++ : $count[$currentPosition] = 1;
 }
-$max = [];
+echo print_r($sum,TRUE)."\n";
 
-echo print_r($count,TRUE)."\n";
-echo print_r((max($count)),TRUE)."\n";
+
+
+
+
+
+
+
 ?>
