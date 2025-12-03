@@ -1,23 +1,51 @@
 <?php
-$handle = fopen ("./AdventodCode1_2","r");
-$count = [];
-$number = 50;
-while ( $inhalt = fgets($handle, 4096 ))
-{
-    $length = strlen($inhalt);
-    switch(substr($inhalt,0,1)){
-        case 'L':
-            $number = $number - (int)substr($inhalt ,1,$length);
-            break;
-        case 'R':
-            $number = $number +(int)substr($inhalt,1,$length);
-            break;
-    }
-    $currentPosition = (($number % 100) + 100) % 100;
-    array_key_exists($currentPosition,$count) ? $count[$currentPosition]++ : $count[$currentPosition] = 1;
-}
-$max = [];
+$handle = fopen("./AdventodCode1_2", "r");
+if ($handle) {
+    // Das Ziffernblatt startet bei 50. Wir verfolgen die Position auf einer unendlichen Achse.
+    $unbounded_pos = 50;
+    $zero_count = 0;
 
-echo print_r($count,TRUE)."\n";
-echo print_r((max($count)),TRUE)."\n";
+    while (($line = fgets($handle)) !== false) {
+        $line = trim($line);
+        if (empty($line)) {
+            continue;
+        }
+
+        $direction = substr($line, 0, 1);
+        $value = (int)substr($line, 1);
+
+        $start_pos = $unbounded_pos;
+        $rotation = 0;
+
+        if ($direction === 'L') {
+            $rotation = -$value;
+        } else if ($direction === 'R') {
+            $rotation = $value;
+        }
+
+        if ($rotation === 0) {
+            continue;
+        }
+
+        $unbounded_pos += $rotation;
+        $end_pos = $unbounded_pos;
+
+        $crossings = 0;
+        if ($rotation > 0) { // Rechtsdrehung
+            // Zähle die Vielfachen von 100 im Intervall (start_pos, end_pos]
+            $crossings = floor($end_pos / 100) - floor($start_pos / 100);
+        } else { // Linksdrehung
+            // Zähle die Vielfachen von 100 im Intervall [end_pos, start_pos)
+            $crossings = floor(($start_pos - 1) / 100) - floor(($end_pos - 1) / 100);
+        }
+        
+        $zero_count += $crossings;
+    }
+
+    fclose($handle);
+
+    echo "The new password is: " . $zero_count . "\n";
+} else {
+    echo "Fehler beim Öffnen der Datei.";
+}
 ?>
