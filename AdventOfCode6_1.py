@@ -1,26 +1,31 @@
 try:
-    with open('AdventOfCode5_1', 'r') as fileinput:
-        lines = [line.strip() for line in fileinput]
+    with open('AdventOfCode6_1', 'r') as fileinput:
+        lines = [line.strip().split(" ") for line in fileinput]
 except FileNotFoundError:
     print("Fehler: Die Eingabedatei 'AdventOfCode4_1.txt' wurde nicht gefunden.")
     lines = []
+result =[]
+for line in lines:
+    result.append(list(filter(lambda x: x != "", line)))
 
-print(lines)
-ranges = []
-numbers = []
-ingredients = 0
-for line in lines :
-    elemts = line.split('-')
-    if len(elemts) == 2 :
-        ranges.append([int(elemts[0]), int(elemts[1])])
-    else :
-        if len(line) > 0 :
-            numbers.append(int(line))
+#Get the Operator with reverse the List and get the first index
+mathoperator = result[-1]
+del result[-1]
 
-for number in numbers:
-    for range in ranges:
-        if number >= range[0] and number <= range[1]:
-            ingredients +=1
-            break
+ergebnis = 0
+for operator in  range(len(mathoperator)):
+    subresult = 0
+    matho = mathoperator[operator]
+    for operand in result :
+        match matho:
+            case '+':
+                subresult += int(operand[operator])
+            case '*':
+                if(subresult ==0):
+                    subresult = int(operand[operator])
+                else:
+                    subresult = int(operand[operator]) * subresult
+    ergebnis += int(subresult)
 
-print(ingredients)
+print(ergebnis)
+

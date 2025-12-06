@@ -1,9 +1,12 @@
 try:
-    with open('AdventOfCode6_1', 'r') as fileinput:
-        lines = [line.strip().split(" ") for line in fileinput]
+    with open('AdventOfCode6_2', 'r') as fileinput:
+        lines = [line.strip("'").split(" ") for line in fileinput]
 except FileNotFoundError:
     print("Fehler: Die Eingabedatei 'AdventOfCode4_1.txt' wurde nicht gefunden.")
     lines = []
+
+print(lines)
+
 result =[]
 for line in lines:
     result.append(list(filter(lambda x: x != "", line)))
