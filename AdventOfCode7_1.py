@@ -12,17 +12,20 @@ except FileNotFoundError:
 if not lines:
     print(0)
 else:
+    # --- TEIL 1: Probleme in Blöcke aufteilen ---
 
-
-
+    # Schritt 1.1: Alle Zeilen auf die gleiche Länge bringen (padding)
     max_len = max(len(line) for line in lines) if lines else 0
     padded_lines = [line.ljust(max_len) for line in lines]
+
+    # Schritt 1.2: Finde die Indizes aller leeren Spalten (Trennspalten)
     separator_indices = []
     for col_idx in range(max_len):
         if all(line[col_idx] == ' ' for line in padded_lines):
             separator_indices.append(col_idx)
 
-
+    # Schritt 1.3: Benutze die Trenner, um die Blöcke auszuschneiden
+    # probleme_als_bloecke wird eine Liste von Listen von Zeilen, z.B. [ [block1_zeile1, ...], [block2_zeile1, ...], ... ]
     bloecke = []
     start_col = 0
     separator_indices.append(max_len)  # Letzten Block sicher erfassen
